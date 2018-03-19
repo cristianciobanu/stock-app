@@ -1,0 +1,11 @@
+/node_modules
+/npm-debug.log
+/src
+/test
+/.vscode
+/.gitignore
+/.eslintrc
+/copyStaticAssets.js
+/tsconfig.json
+/tslint.json
+/README.md

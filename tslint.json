@@ -1,0 +1,18 @@
+{
+  "extends": "tslint-microsoft-contrib",
+  
+  "rules":{
+	"no-relative-imports": false,
+	"variable-name": false,
+	"typedef": false,
+	"no-any": false,
+	"no-var-self": false,
+	"no-unused-expression": false,
+	"chai-vague-errors": false,
+	"no-backbone-get-set-outside-model": false,
+	"export-name": false,
+	"no-require-imports": false,
+	"no-import-side-effect": false,
+	"mocha-no-side-effect-code": false
+	}
+}

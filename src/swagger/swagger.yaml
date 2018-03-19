@@ -1,0 +1,640 @@
+swagger: '2.0'
+info:
+  description: some desc
+  version: 1.0.0
+  title: ReviewIT
+host: localhost:3001
+basePath: /v1
+tags:
+  - name: review
+    description: reviews description
+    externalDocs:
+      description: Find out more
+      url: 'http://reviewit.com'
+  - name: target
+    description: targets description
+  - name: category
+    description: categories description
+  - name: tag
+    description: tags description
+schemes:
+  - http
+  - https
+paths:
+  '/categories':
+     put:
+      tags:
+      - "category"
+      summary: "Add a new category"
+      operationId: addCategory
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "create new category"
+        required: true
+        schema:
+          $ref: "#/definitions/Category"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "category added"
+          schema:
+            $ref: "#/definitions/Category"
+      security:
+      - review_it_auth:
+        - "write:data"
+     get:
+      tags:
+      - "category"
+      summary: "get all categories"
+      operationId: getAllCategories
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "ok"
+          schema:
+              type: 'array'
+              items:
+                $ref: '#/definitions/Category'
+      security:
+      - review_it_auth:
+        - "read:data"
+  '/categories/{categoryId}':
+    get:
+      tags:
+        - category
+      summary: Get category
+      operationId: getCategory
+      produces:
+        - application/json
+      parameters:
+        - name: categoryId
+          in: path
+          description: ID of category from db
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Category'
+        '400':
+          description: Bad id
+        '404':
+          description: Category not found
+      security:
+      - review_it_auth:
+        - "read:data"
+    post:
+      tags:
+        - "category"
+      summary: "Update an existing category"
+      operationId: updateCategory
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: categoryId
+          in: path
+          description: ID of category that needs to be found
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "category data"
+          required: true
+          schema:
+            $ref: "#/definitions/Category"
+      responses:
+        '400':
+          description: Bad id
+        '200':
+          description: successful operation
+      security:
+      - review_it_auth:
+        - "write:data"
+    delete:
+      tags:
+        - category
+      summary: Delete the category by id
+      operationId: deleteCategory
+      produces:
+        - application/json
+      parameters:
+        - name: categoryId
+          in: path
+          description: ID of the category that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Category not found
+      security:
+      - review_it_auth:
+        - "write:data"
+  '/targets':
+     put:
+      tags:
+      - "target"
+      summary: "Add a new target"
+      operationId: addTarget
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "create new target"
+        required: true
+        schema:
+          $ref: "#/definitions/Target"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "target added"
+          schema:
+            $ref: "#/definitions/Target"
+      security:
+      - review_it_auth:
+        - "write:data"
+     get:
+      tags:
+      - "target"
+      summary: "get all targets"
+      operationId: getAllTargets
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "ok"
+          schema:
+              type: 'array'
+              items:
+                $ref: '#/definitions/Target'
+      security:
+      - review_it_auth:
+        - "read:data"
+  '/targets/{targetId}':
+    get:
+      tags:
+        - target
+      summary: Get target
+      operationId: getTarget
+      produces:
+        - application/json
+      parameters:
+        - name: targetId
+          in: path
+          description: ID of target from db
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Target'
+        '400':
+          description: Bad id
+        '404':
+          description: Target not found
+      security:
+      - review_it_auth:
+        - "read:data"
+    post:
+      tags:
+        - "target"
+      summary: "Update an existing target"
+      operationId: updateTarget
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: targetId
+          in: path
+          description: ID of target that needs to be found
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "target data"
+          required: true
+          schema:
+            $ref: "#/definitions/Target"
+      responses:
+        '400':
+          description: Bad id
+        '200':
+          description: successful operation
+      security:
+      - review_it_auth:
+        - "write:data"
+    delete:
+      tags:
+        - target
+      summary: Delete the target by id
+      operationId: deleteTarget
+      produces:
+        - application/json
+      parameters:
+        - name: targetId
+          in: path
+          description: ID of the target that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Target not found
+      security:
+      - review_it_auth:
+        - "write:data"
+  '/targets/{targetId}/reviews':
+    get:
+      tags:
+        - target
+      summary: Get reviews by target id
+      operationId: getAllReviewsForTarget
+      produces:
+        - application/json
+      parameters:
+        - name: targetId
+          in: path
+          description: ID of target from db
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+              type: 'array'
+              items:
+                $ref: '#/definitions/Review'
+        '400':
+          description: Bad id
+        '404':
+          description: Reviews not found
+      security:
+      - review_it_auth:
+        - "read:data"
+  '/targets/{targetId}/tagsummaries':
+    get:
+      tags:
+        - target
+      summary: Get tagsummaries for target
+      operationId: getAllTagSummariesForTarget
+      produces:
+        - application/json
+      parameters:
+        - name: targetId
+          in: path
+          description: ID of target from db
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+              type: 'array'
+              items:
+                $ref: '#/definitions/TagSummary'
+        '400':
+          description: Bad id
+        '404':
+          description: target not found
+      security:
+      - review_it_auth:
+        - "read:data"
+  '/tags':
+     put:
+      tags:
+      - "tag"
+      summary: "Add a new tag"
+      operationId: addTag
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "create new tag"
+        required: true
+        schema:
+          $ref: "#/definitions/Tag"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "tag added"
+          schema:
+            $ref: "#/definitions/Tag"
+      security:
+      - review_it_auth:
+        - "write:data"
+     get:
+      tags:
+      - "tag"
+      summary: "get all tags"
+      operationId: getAllTags
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "ok"
+          schema:
+              type: 'array'
+              items:
+                $ref: '#/definitions/Tag'
+      security:
+      - review_it_auth:
+        - "read:data"
+  '/tags/{tagId}':
+    get:
+      tags:
+        - tag
+      summary: Get tag
+      operationId: getTag
+      produces:
+        - application/json
+      parameters:
+        - name: tagId
+          in: path
+          description: ID of tag from db
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Tag'
+        '400':
+          description: Bad id
+        '404':
+          description: Tag not found
+      security:
+      - review_it_auth:
+        - "read:data"
+    post:
+      tags:
+        - "tag"
+      summary: "Update an existing tag"
+      operationId: updateTag
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: tagId
+          in: path
+          description: ID of tag that needs to be found
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "tag data"
+          required: true
+          schema:
+            $ref: "#/definitions/Tag"
+      responses:
+        '400':
+          description: Bad id
+        '200':
+          description: successful operation
+      security:
+      - review_it_auth:
+        - "read:data"
+    delete:
+      tags:
+        - tag
+      summary: Delete the tag by id
+      operationId: deleteTag
+      produces:
+        - application/json
+      parameters:
+        - name: tagId
+          in: path
+          description: ID of the tag that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Tag not found
+      security:
+      - review_it_auth:
+        - "write:data"
+  '/reviews':
+     put:
+      tags:
+        - "review"
+      summary: "Add a new review"
+      operationId: addReview
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "create new review"
+          required: true
+          schema:
+            $ref: "#/definitions/Review"
+      responses:
+        400:
+          description: "Invalid input"
+        200:
+          description: "review added"
+          schema:
+            $ref: "#/definitions/Review"
+      security:
+      - review_it_auth:
+        - "write:data"
+     get:
+      tags:
+        - "review"
+      summary: "get all reviews"
+      operationId: getAllReviews
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "ok"
+          schema:
+              type: 'array'
+              items:
+                $ref: '#/definitions/Review'
+      security:
+      - review_it_auth:
+        - "read:data"
+  '/reviews/{reviewId}':
+    get:
+      tags:
+        - review
+      summary: Get review
+      operationId: getReview
+      produces:
+        - application/json
+      parameters:
+        - name: reviewId
+          in: path
+          description: ID of review from db
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Review'
+        '400':
+          description: Bad id
+        '404':
+          description: Review not found
+      security:
+      - review_it_auth:
+        - "read:data"
+    post:
+      tags:
+        - "review"
+      summary: "Update an existing review"
+      operationId: updateReview
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: reviewId
+          in: path
+          description: ID of review that needs to be found
+          required: true
+          type: string
+        - in: "body"
+          name: "body"
+          description: "review data"
+          required: true
+          schema:
+            $ref: "#/definitions/Review"
+      responses:
+        '400':
+          description: Invalid input
+        '200':
+          description: successful operation
+      security:
+      - review_it_auth:
+        - "write:data"
+    delete:
+      tags:
+        - review
+      summary: Delete the review by id
+      operationId: deleteReview
+      produces:
+        - application/json
+      parameters:
+        - name: reviewId
+          in: path
+          description: ID of the review that needs to be deleted
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+        '404':
+          description: Review not found
+      security:
+      - review_it_auth:
+        - "write:data"
+definitions:
+  Category:
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+        description: Category name
+      parent:
+        type: string
+        description: id of the parent name
+  Target:
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+        description: Target name
+  Tag:
+    type: object
+    properties:
+      _id:
+        type: string
+      name:
+        type: string
+        description: Tag name
+  TagSummary:
+    type: object
+    properties:
+      tagId:
+        type: string
+      name:
+        type: string
+        description: Tag name
+      avg:
+        type: number
+      count:
+        type: integer
+  Review:
+    type: object
+    properties:
+      _id:
+        type: string
+      text:
+        type: string
+        description: review text
+      targetId:
+        type: string
+        description: id of the target
+      timestamp:
+        type: string
+        description: time of the added review
+      tagId:
+        type: string
+        description: id of the tag
+      userId:
+        type: string
+        description: id of the user
+securityDefinitions:
+  review_it_auth:
+    type: "oauth2"
+    tokenUrl: "https://review-auth-dev.herokuapp.com/oauth/token"
+    flow: "password"
+    scopes:
+      write:data: "modify data in your account"
+      read:data: "read data"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+
